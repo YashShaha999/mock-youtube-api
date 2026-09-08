@@ -1,6 +1,6 @@
-# 📺 Mock YouTube API
+# 🌐 Mock Social Media API (YouTube, Instagram, Facebook)
 
-Standalone Mock YouTube Data API v3 microservice for the **CreatorIQ** platform.
+Standalone Mock Social Media Data API (YouTube, Instagram, Facebook) microservice for the **CreatorIQ** platform.
 
 ## 🚀 Endpoints
 

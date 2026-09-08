@@ -1,7 +1,7 @@
 {
-  "name": "mock-youtube-api",
+  "name": "mock-api",
   "version": "1.0.0",
-  "description": "Standalone mock YouTube API for CreatorIQ project",
+  "description": "Standalone mock social media API (YouTube, Instagram, Facebook) for CreatorIQ project",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
