@@ -6,6 +6,15 @@ const cors = require('cors');
 const { mockChannel, mockVideos, mockPlaylists, mockCommentThreads } = require('./data/youtube');
 const { mockInstagramProfile, mockInstagramPosts } = require('./data/instagram');
 const { mockFacebookPage, mockFacebookPosts } = require('./data/facebook');
+const {
+  mockIncomeSummary,
+  mockIncomeByStream,
+  mockIncomeByPlatform,
+  mockMonthlyIncomeTrend,
+  mockTopEarningContent,
+  mockRecentPayouts,
+  mockSponsorshipDeals
+} = require('./data/income');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -53,6 +62,23 @@ app.get('/health', (req, res) => {
           page: "/facebook/v1/page",
           posts: "/facebook/v1/posts",
           singlePost: "/facebook/v1/posts/fb_post_1"
+        }
+      },
+      income: {
+        service: "Creator Monetization, Revenue & Income Analytics",
+        totalGrossIncome: mockIncomeSummary.totalGrossIncome,
+        thisMonthIncome: mockIncomeSummary.thisMonthIncome,
+        currency: mockIncomeSummary.currency,
+        currencySymbol: mockIncomeSummary.currencySymbol,
+        endpoints: {
+          all: "/income/all",
+          summary: "/income/summary",
+          trends: "/income/trends",
+          streams: "/income/streams",
+          platforms: "/income/platforms",
+          payouts: "/income/payouts",
+          sponsorships: "/income/sponsorships",
+          topContent: "/income/top-content"
         }
       }
     }
@@ -273,6 +299,79 @@ app.get('/:platform/v1/profile', (req, res) => {
 });
 
 // ============================================
+// CREATOR INCOME & REVENUE ANALYTICS ENDPOINTS
+// ============================================
+
+// 1. Unified Complete Income Payload (Single-call dashboard load)
+app.get('/income/all', (req, res) => {
+  res.json({
+    summary: mockIncomeSummary,
+    streams: mockIncomeByStream,
+    platforms: mockIncomeByPlatform,
+    trends: mockMonthlyIncomeTrend,
+    topContent: mockTopEarningContent,
+    payouts: mockRecentPayouts,
+    sponsorships: mockSponsorshipDeals
+  });
+});
+
+// 2. Income Summary KPIs
+app.get('/income/summary', (req, res) => {
+  res.json({
+    summary: mockIncomeSummary,
+    streams: mockIncomeByStream,
+    platforms: mockIncomeByPlatform
+  });
+});
+
+// 3. 12-Month Monthly Revenue Trends
+app.get('/income/trends', (req, res) => {
+  res.json({
+    currency: mockIncomeSummary.currency,
+    currencySymbol: mockIncomeSummary.currencySymbol,
+    trends: mockMonthlyIncomeTrend
+  });
+});
+
+// 4. Revenue Streams Breakdown
+app.get('/income/streams', (req, res) => {
+  res.json({
+    streams: mockIncomeByStream
+  });
+});
+
+// 5. Income by Platform
+app.get('/income/platforms', (req, res) => {
+  res.json({
+    platforms: mockIncomeByPlatform
+  });
+});
+
+// 6. Recent Payouts & Settlement Schedule
+app.get('/income/payouts', (req, res) => {
+  res.json({
+    pendingPayout: mockIncomeSummary.pendingPayout,
+    nextPayoutDate: mockIncomeSummary.nextPayoutDate,
+    payouts: mockRecentPayouts
+  });
+});
+
+// 7. Brand Sponsorship Deals
+app.get('/income/sponsorships', (req, res) => {
+  res.json({
+    activeSponsorships: mockIncomeSummary.activeSponsorships,
+    sponsorships: mockSponsorshipDeals
+  });
+});
+
+// 8. Top Earning Content
+app.get('/income/top-content', (req, res) => {
+  res.json({
+    topContent: mockTopEarningContent
+  });
+});
+
+// ============================================
 // ROOT & SERVER START
 // ============================================
 app.get('/', (req, res) => {
@@ -284,5 +383,6 @@ app.listen(PORT, () => {
   console.log(`📺 YouTube:   http://localhost:${PORT}/youtube/v3/videos?chart=mostPopular`);
   console.log(`📸 Instagram: http://localhost:${PORT}/instagram/v1/posts`);
   console.log(`👥 Facebook:  http://localhost:${PORT}/facebook/v1/posts`);
+  console.log(`💰 Income:    http://localhost:${PORT}/income/all`);
   console.log(`🔍 Health:    http://localhost:${PORT}/health`);
 });
